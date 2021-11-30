@@ -11,21 +11,35 @@ class GamePage:
         self.win = win
 
         # Above Entry, the word
-        self.i = 0  # keep track of the index
+        self.i = 0  # keep track of the index (useless in this version)
         self.font_label = pygame.font.SysFont("Consolas", 70)
         self.txt = ""
         self.txt_color = None
-        self.next_word()
+        self.next_word()  # genereate the first word
 
         # Entry
-        manager = TextInputManager(validator=lambda input: len(input) <= 15)
+        manager = TextInputManager(validator=lambda val: len(val) <= 15)
         self.font_entry = pygame.font.SysFont("Consolas", 55)
         self.textinput_custom = TextInputVisualizer(manager=manager, font_object=self.font_entry)
+        self.textinput_custom.cursor_width = 0
 
         # Score
         self.score = 0
         self.font_score = pygame.font.SysFont("Consolas", 25)
-        # other
+
+        # Timer
+        self.time_remaining = 30  # seconds
+        self.font_timer = pygame.font.SysFont("Consolas", 30)
+
+        # RestartButton
+        self.btn_restart = ButtonImg(img_restart_button, 0, 0, self.restart)
+        self.btn_restart.rect = self.btn_restart.surface.get_rect(topright=(WIDTH - 10, 10))
+
+        # GOback button
+        self.btn_goback = ButtonImg(img_goback, 0, 0, self.quit)
+        self.btn_goback.rect = self.btn_goback.surface.get_rect(topleft=(10, 10))
+
+        self.clickable_objects = [self.btn_restart, self.btn_goback]
 
     def mainloop(self):
         clock = pygame.time.Clock()
@@ -33,7 +47,8 @@ class GamePage:
         self.textinput_custom.font_color = BLACK
 
         while self.important_var[1]:
-            clock.tick(FPS)
+            dt = clock.tick(FPS)
+            self.time_remaining -= dt / 1000
             self.win.fill(WHITE)
 
             events = pygame.event.get()
@@ -43,8 +58,13 @@ class GamePage:
                     self.important_var = [0, 0]
                 elif event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_RETURN:
-                        self.submit(self.textinput_custom.value)
-
+                        if self.time_remaining > 0:
+                            self.submit(self.textinput_custom.value)
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        for obj in self.clickable_objects:
+                            if obj.isMouseOn(event.pos):
+                                obj.on_click()
             self.update()
             pygame.display.flip()
 
@@ -64,7 +84,7 @@ class GamePage:
         self.txt_color = rand_elem(list(dico.values()))
 
     def quit(self):
-        self.important_var = [1, 0]
+        self.important_var[0], self.important_var[1] = 1, 0
 
     def restart(self):
         self.__init__(self.important_var, self.win)
@@ -79,7 +99,19 @@ class GamePage:
 
         # score
         render = self.font_score.render(f"Score : {self.score}", True, BLACK)
-        self.win.blit(render, render.get_rect(topright=(WIDTH - 5, 5)))
+        self.win.blit(render, render.get_rect(bottomleft=(0 + 10, HEIGHT - 10)))
+
+        # timer
+        if self.time_remaining < 0:
+            self.time_remaining = 0
+        render = self.font_timer.render(f"{self.time_remaining:.1f}s", True, RED)
+        self.win.blit(render, render.get_rect(bottomright=(WIDTH - 10, HEIGHT - 10)))
+
+        # btn restart
+        self.win.blit(self.btn_restart.surface, self.btn_restart.rect)
+
+        # btn go back
+        self.win.blit(self.btn_goback.surface, self.btn_goback.rect)
 
 
 def rand_elem(liste):

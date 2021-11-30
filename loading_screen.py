@@ -17,12 +17,8 @@ class StartPage:
         self.instruction_font = pygame.font.Font(None, 40)
         self.instrution_text = self.instruction_font.render('Type the font color not the word!', False, WHITE)
 
-        # clicktostart
-        self.text_input = "Click to start"
-        self.text = button_font.render(self.text_input, True, BLACK)
-
-        # button start (disabled)
-        self.btn_start = ButtonImg(img_button, WIDTH // 2, 2 * HEIGHT // 3, self.quit)
+        # button start
+        self.btn_start = ButtonImg(img_play_button, WIDTH // 2, 2 * HEIGHT // 3, self.quit)
 
         self.clickable_objects = [self.btn_start]
 

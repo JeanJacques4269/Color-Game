@@ -11,7 +11,7 @@ class Game:
         self.game_is_on = False
         self.welcome_screen_is_on = True
 
-        self.controler = [1, 0]  # loadiing, game
+        self.controler = [True,False]  # keeps track of what window should be active with this format : [loading, game]
 
         self.game_window = GamePage(self.controler, self.win)
         self.welcome_window = StartPage(self.controler)
@@ -27,10 +27,9 @@ class Game:
                     self.controler = [0, 0]
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        for object in self.welcome_window.clickable_objects:
-                            if object.isMouseOn(event.pos):
-                                object.on_click()
-                                print(self.controler)
+                        for obj in self.welcome_window.clickable_objects:
+                            if obj.isMouseOn(event.pos):
+                                obj.on_click()
             self.welcome_window.update(self.win)
             pygame.display.flip()
 
