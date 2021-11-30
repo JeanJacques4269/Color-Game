@@ -1,8 +1,7 @@
 import pygame.display
-from loading_screen import StartPage
+from screens.loading_screen import StartPage
+from screens.game_screen import GamePage
 from constants import *
-from button import Button, ButtonImg
-from game_window import GamePage
 
 
 class Game:
@@ -11,7 +10,7 @@ class Game:
         self.game_is_on = False
         self.welcome_screen_is_on = True
 
-        self.controler = [True,False]  # keeps track of what window should be active with this format : [loading, game]
+        self.controler = [True, False]  # keeps track of what window should be active with this format : [loading, game]
 
         self.game_window = GamePage(self.controler, self.win)
         self.welcome_window = StartPage(self.controler)

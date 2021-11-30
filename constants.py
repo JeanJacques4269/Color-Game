@@ -1,7 +1,7 @@
 import platform
-from colors import *
 import pygame.math
 from screeninfo import get_monitors
+from components.colors import *
 
 if platform.system() == "Windows":
     main = get_monitors()[0]  # Get screens size
@@ -17,8 +17,6 @@ BLOCK = WIDTH // 16  # arbitrary mesure unit
 FPS = 30
 
 # Sprites
-
-# shit
 pygame.font.init()
 
 button_font = pygame.font.Font(None, 25)

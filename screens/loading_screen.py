@@ -1,5 +1,5 @@
 from constants import *
-from button import Button, ButtonImg
+from components.button import ButtonImg
 
 
 class StartPage:

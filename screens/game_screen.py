@@ -1,8 +1,8 @@
 import random
 
 from constants import *
-from button import Button, ButtonImg
-from entry import TextInputManager, TextInputVisualizer
+from components.button import ButtonImg
+from components.entry import TextInputManager, TextInputVisualizer
 
 
 class GamePage:
@@ -11,7 +11,6 @@ class GamePage:
         self.win = win
 
         # Above Entry, the word
-        self.i = 0  # keep track of the index (useless in this version)
         self.font_label = pygame.font.SysFont("Consolas", 70)
         self.txt = ""
         self.txt_color = None
@@ -79,7 +78,6 @@ class GamePage:
         self.next_word()
 
     def next_word(self):
-        self.i += 1
         self.txt = rand_elem(list(dico.keys()))
         self.txt_color = rand_elem(list(dico.values()))
 
