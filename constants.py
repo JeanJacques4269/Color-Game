@@ -16,6 +16,9 @@ WIDTH, HEIGHT = int(WIDTH * ratio), int(WIDTH * ratio * 9 / 16)
 BLOCK = WIDTH // 16  # arbitrary mesure unit
 FPS = 30
 
+# Game
+default_time = 30  # seconds
+
 # Sprites
 pygame.font.init()
 

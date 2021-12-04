@@ -23,10 +23,18 @@ class StartPage:
         self.clickable_objects = [self.btn_start]
 
     def update(self, win):
+        # bg
         win.blit(background, (0, 0))
-        win.blit(self.btn_start.surface, self.btn_start.rect)
+
+        # title
         win.blit(self.title_text, self.title_text.get_rect(center=(WIDTH // 2, HEIGHT // 6)))
+
+        # rules
         win.blit(self.instrution_text, self.instrution_text.get_rect(center=(WIDTH // 2, HEIGHT // 3)))
 
+        # button start
+        win.blit(self.btn_start.surface, self.btn_start.rect)
+
     def quit(self):
-        self.important_var[0], self.important_var[1] = 0, 1
+        self.important_var[0], self.important_var[1] = 0, 1  # we set the controller var to [False, True]
+        # which means that we want to have the loading page

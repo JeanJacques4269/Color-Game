@@ -6,5 +6,5 @@ if __name__ == "__main__":
     pygame.display.set_caption("Brain Challenge")
     win = pygame.display.set_mode((WIDTH, HEIGHT))
     game = Game(win)
-    game.loading_screen()
+    game.run()
     pygame.quit()

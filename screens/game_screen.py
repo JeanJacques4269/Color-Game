@@ -1,8 +1,7 @@
 import random
-
 from constants import *
 from components.button import ButtonImg
-from components.entry import TextInputManager, TextInputVisualizer
+from pygame_textinput import TextInputManager, TextInputVisualizer
 
 
 class GamePage:
@@ -10,7 +9,7 @@ class GamePage:
         self.important_var = controler
         self.win = win
 
-        # Above Entry, the word
+        # The word you have to write the color of
         self.font_label = pygame.font.SysFont("Consolas", 70)
         self.txt = ""
         self.txt_color = None
@@ -21,20 +20,21 @@ class GamePage:
         self.font_entry = pygame.font.SysFont("Consolas", 55)
         self.textinput_custom = TextInputVisualizer(manager=manager, font_object=self.font_entry)
         self.textinput_custom.cursor_width = 0
+        self.textinput_custom.font_color = BLACK
 
         # Score
         self.score = 0
         self.font_score = pygame.font.SysFont("Consolas", 25)
 
         # Timer
-        self.time_remaining = 30  # seconds
+        self.time_remaining = default_time
         self.font_timer = pygame.font.SysFont("Consolas", 30)
 
         # RestartButton
         self.btn_restart = ButtonImg(img_restart_button, 0, 0, self.restart)
         self.btn_restart.rect = self.btn_restart.surface.get_rect(topright=(WIDTH - 10, 10))
 
-        # GOback button
+        # Goback button
         self.btn_goback = ButtonImg(img_goback, 0, 0, self.quit)
         self.btn_goback.rect = self.btn_goback.surface.get_rect(topleft=(10, 10))
 
@@ -42,8 +42,6 @@ class GamePage:
 
     def mainloop(self):
         clock = pygame.time.Clock()
-        self.textinput_custom.cursor_width = 0
-        self.textinput_custom.font_color = BLACK
 
         while self.important_var[1]:
             dt = clock.tick(FPS)
@@ -68,24 +66,21 @@ class GamePage:
             pygame.display.flip()
 
     def submit(self, val):
-        if val.upper() == reversed_dico[self.txt_color]:
+        if len(val) < 3:
+            return
+            # check wether the world written corresponds to the color of the word
+        if val.upper() == color_dico_reversed[self.txt_color]:
             self.score += 100
 
         else:
-            print(reversed_dico[self.txt_color])
+            print(color_dico_reversed[self.txt_color])
             pass
         self.textinput_custom.value = ""
         self.next_word()
 
     def next_word(self):
-        self.txt = rand_elem(list(dico.keys()))
-        self.txt_color = rand_elem(list(dico.values()))
-
-    def quit(self):
-        self.important_var[0], self.important_var[1] = 1, 0
-
-    def restart(self):
-        self.__init__(self.important_var, self.win)
+        self.txt = rand_elem(list(color_dico.keys()))
+        self.txt_color = rand_elem(list(color_dico.values()))
 
     def update(self):
         # entry
@@ -111,6 +106,17 @@ class GamePage:
         # btn go back
         self.win.blit(self.btn_goback.surface, self.btn_goback.rect)
 
+    def restart(self):
+        self.__init__(self.important_var, self.win)
+
+    def quit(self):
+        self.score = 0
+        self.time_remaining = default_time
+        self.important_var[0], self.important_var[1] = 1, 0
+
 
 def rand_elem(liste):
+    """
+    Returns a random element in a list
+    """
     return liste[random.randint(0, len(liste) - 1)]
